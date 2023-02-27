@@ -1,0 +1,15 @@
+/siakad_backend/node_modules
+/siakad_backend/public/hot
+/siakad_backend/public/storage
+/siakad_backend/storage/*.key
+/siakad_backend/vendor
+/siakad_backend/.env
+/siakad_backend/.env.backup
+/siakad_backend/.phpunit.result.cache
+/siakad_backend/docker-compose.override.yml
+/siakad_backend/Homestead.json
+/siakad_backend/Homestead.yaml
+/siakad_backend/npm-debug.log
+/siakad_backend/yarn-error.log
+/siakad_backend/.idea
+/siakad_backend/.vscode
