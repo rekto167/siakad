@@ -13,3 +13,25 @@
 /siakad_backend/yarn-error.log
 /siakad_backend/.idea
 /siakad_backend/.vscode
+
+# dependencies
+/siakad_web_fe/node_modules
+/siakad_web_fe/.pnp
+/siakad_web_fe/.pnp.js
+
+# testing
+/siakad_web_fe/coverage
+
+# production
+/siakad_web_fe/build
+
+# misc
+/siakad_web_fe/.DS_Store
+/siakad_web_fe/.env.local
+/siakad_web_fe/.env.development.local
+/siakad_web_fe/.env.test.local
+/siakad_web_fe/.env.production.local
+
+/siakad_web_fe/npm-debug.log*
+/siakad_web_fe/yarn-debug.log*
+/siakad_web_feyarn-error.log*
