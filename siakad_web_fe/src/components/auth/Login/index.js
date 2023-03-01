@@ -4,9 +4,14 @@ import {useState} from "react";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [roleLogin, setRoleLogin] = useState('');
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword);
+    }
+
+    const handleRoleLogin = (e) => {
+        setRoleLogin(e.target.value);
     }
 
     return (
@@ -18,24 +23,25 @@ const Login = () => {
                 </div>
                 <div className="mt-5 flex flex-col w-full">
                     <div className="flex flex-col border border-blue-800 p-2 rounded-md">
-                        <span className="font-semibold text-center">Login Sebagai</span>
+                        <span className="font-semibold text-center">Sebagai</span>
                         <div className="flex items-center justify-around mt-3">
                             <div className="flex items-center self-center mb-2">
-                                <input id="default-radio-1" type="radio" value="" name="default-radio"
+                                <input id="guruRole" type="radio" value="guru" onChange={handleRoleLogin} name="radiorole"
                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                    <label htmlFor="default-radio-1"
-                                           className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Guru</label>
+                                <label htmlFor="guruRole"
+                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Guru</label>
                             </div>
                             <div className="flex items-center mb-2">
-                                <input id="default-radio-1" type="radio" value="" name="default-radio"
+                                <input id="siswaRole" type="radio" value="siswa" name="radiorole"
+                                       onChange={handleRoleLogin}
                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                <label htmlFor="default-radio-1"
+                                <label htmlFor="siswaRole"
                                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Siswa</label>
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col mb-3">
-                        <label className="font-semibold">Username</label>
+                        <label className="font-semibold">{roleLogin == 'guru' ? 'NIP' : 'NIS'}</label>
                         <input type="text" className="p-3 rounded-md focus:outline-none focus:outline-cyan-600 mt-2" />
                     </div>
                     <div className="flex flex-col mb-3">
