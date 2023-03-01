@@ -15,7 +15,7 @@ const Login = () => {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen" style={{backgroundImage: `url(${backgroundnya})`, backgroundSize:'cover'}} >
+        <div className="flex justify-center items-center h-screen" >
             <div className="p-8 bg-cyan-400 flex flex-col justify-center items-center rounded-xl">
                 <div className="flex flex-col justify-center items-center">
                     <img src={tutwuri} className="h-20" />
