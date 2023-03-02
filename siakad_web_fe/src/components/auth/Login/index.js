@@ -1,6 +1,6 @@
 import backgroundnya from "../../../assets/img/bg-img.png"
 import tutwuri from "../../../assets/img/tutwuri.png"
-import {useState} from "react";
+import { useState } from "react";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -27,16 +27,16 @@ const Login = () => {
                         <div className="flex items-center justify-around mt-3">
                             <div className="flex items-center self-center mb-2">
                                 <input id="guruRole" type="radio" value="guru" onChange={handleRoleLogin} name="radiorole"
-                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                 <label htmlFor="guruRole"
-                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Guru</label>
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Guru</label>
                             </div>
                             <div className="flex items-center mb-2">
                                 <input id="siswaRole" type="radio" value="siswa" name="radiorole"
-                                       onChange={handleRoleLogin}
-                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    onChange={handleRoleLogin}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                 <label htmlFor="siswaRole"
-                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Siswa</label>
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Siswa</label>
                             </div>
                         </div>
                     </div>
