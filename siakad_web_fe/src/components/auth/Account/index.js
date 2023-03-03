@@ -1,36 +1,60 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
+import Swal from "sweetalert2";
 
 Modal.setAppElement("#root");
 const Account = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [roles, setRoles] = useState([]);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     role: '',
-    name:'',
-    username:'',
-    nip:'',
-    nis:'',
-    password:''
-  });
-
-  useEffect(() => {
-    getRoles();
-  }, []);
-
-  const getRoles = async () => {
-    const res = await axios.get("http://localhost:8000/api/roles");
-    setRoles(res.data);
+    name: '',
+    username: '',
+    nip: '',
+    nis: '',
+    password: '',
+    confirmPassword: '',
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleModal = () => {
     setShowModal(!showModal);
+    if (showModal == false) {
+      resetFormData();
+    }
   };
+
+  const resetFormData = () => {
+    setFormData(initialFormData)
+  }
 
   const handleChange = e => {
     setFormData({...formData, [e.target.name]: e.target.value});
     console.log(formData)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    if (formData.password !== formData.confirmPassword){
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+
+      Toast.fire({
+        icon: 'error',
+        title: 'Password Salah!'
+      })
+    }
   }
 
   return (
@@ -49,59 +73,73 @@ const Account = () => {
         contentLabel="Tambah Akun"
         className="modal-content flex justify-center items-center h-screen"
       >
-        <button></button>
         <div className={"w-full md:w-6/12 bg-cyan-400 p-3 md:p-10 rounded-lg"}>
-          <div className="mb-2 md:mb-3 flex flex-col">
-            <label className="font-semibold">Pilih Role</label>
-            <select className="p-2 md:p-3 rounded-md mt-2 md:mt-3" name="role" onChange={handleChange}
-            value={formData.role}>
-                <option selected value="">--Pilih Role--</option>
-              {roles.map((role) => (
-                <option key={role.name} value={role.name} selected={formData.role == role.name}>
-                  {role.alias_name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-2 md:mb-3 flex flex-col">
-            <label className="font-semibold">Nama Lengkap</label>
-            <input
-              type="text"
-              className="p-2 md:p-3 rounded-md"
-              placeholder="Nama Lengkap"
-            />
-          </div>
           {
-            formData.role == 'admin' || formData.role == 'super_admin' && (
-                <div className="mb-2 md:mb-3 flex flex-col">
+            formData.role === '' ? (
+                <div>
+                  <span className="text-center font-semibold">Pilih Role</span>
+                  <select className="p-2 w-full rounded-md" name="role" onChange={handleChange}>
+                    <option selected>--Pilih Role---</option>
+                    <option value="admin">Admin</option>
+                    <option value="siswa">Siswa</option>
+                    <option value="guru">Guru</option>
+                  </select>
+                </div>
+            ) : (
+                <div></div>
+            )
+          }
+          {
+            formData.role !== '' && formData.role === 'admin' ? (
+                <div>
+                  <div>
                     <label className="font-semibold">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        className="p-2 md:p-3 rounded-md"
-                        placeholder="Username"
-                    />
+                    <input name="username" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} />
+                  </div>
+                </div>
+            ) : formData.role === 'guru' ? (
+                <div>
+                  <label className="font-semibold">NIP</label>
+                  <input name="nip" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} />
+                </div>
+            ) : formData.role === 'siswa' ? (
+                <div>
+                  <label className="font-semibold">NIS</label>
+                  <input name="nis" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} />
+                </div>
+            ) : (<div></div>)
+          }
+
+          {
+            formData.role !== '' || formData.role !== null ? (
+                <div>
+                  <div className="flex flex-col mt-2">
+                    <label className="font-semibold">Nama</label>
+                    <input name="name" className="p-2 rounded-md w-full outline-cyan-500" onChange={handleChange} />
+                  </div>
+                  <div className="flex flex-col mt-2">
+                    <label className="font-semibold">Email</label>
+                    <input name="email" className="p-2 rounded-md w-full outline-cyan-500" type="email" onChange={handleChange} />
+                  </div>
+                  <div className="flex flex-col mt-2">
+                    <label className="font-semibold">Password</label>
+                    <input name="password" className="p-2 rounded-md w-full outline-cyan-500" type="password" onChange={handleChange} />
+                  </div>
+                  <div className="flex flex-col mt-2">
+                    <label className="font-semibold">Konfirmasi Password</label>
+                    <input name="confirmPassword" className="p-2 rounded-md w-full outline-cyan-500" type="password" onChange={handleChange} />
+                  </div>
+                </div>
+            ) : (
+                <div className="text-red-500 font-semibold">
+                  <span>Anda harus pilih role terlebih dahulu</span>
                 </div>
             )
           }
-          <div className="mb-2 md:mb-3 flex flex-col">
-            <label className="font-semibold">Nama Lengkap</label>
-            <input
-              type="text"
-              className="p-2 md:p-3 rounded-md"
-              placeholder="Nama Lengkap"
-            />
-          </div>
-          <div className="flex flex-row justify-around mt-3 md:mt-5">
-            <button className="p-2 md:p-3 px-6 md:px-10 bg-blue-700 text-white hover:bg-blue-400 font-semibold rounded-md">
-              Simpan
-            </button>
-            <button
-              onClick={handleModal}
-              className="p-2 md:p-3 px-6 md:px-10 bg-rose-500 text-white hover:bg-rose-700 font-semibold rounded-md"
-            >
-              Batal
-            </button>
+
+          <div className="flex justify-around mt-10">
+            <button className="bg-blue-500 p-3 px-10 font-semibold text-white rounded-md" onClick={handleSubmit}>Simpan</button>
+            <button className="bg-red-500 p-3 px-10 font-semibold text-white rounded-md" onClick={handleModal}>Batal</button>
           </div>
         </div>
       </Modal>
