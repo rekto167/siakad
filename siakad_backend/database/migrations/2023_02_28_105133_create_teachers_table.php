@@ -15,6 +15,9 @@ class CreateTeachersTable extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->unique();
+            $table->string('user_uuid');
+            $table->foreign('user_uuid')->references('uuid')->on('users');
             $table->timestamps();
         });
     }

@@ -16,24 +16,12 @@ class RoleSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'super_admin',
-                'alias_name' => 'Super Admin'
-            ],
-            [
                 'name' => 'admin',
                 'alias_name' => 'Admin'
             ],
             [
-                'name' => 'orang_tua',
-                'alias_name' => 'Orang Tua'
-            ],
-            [
                 'name' => 'guru',
                 'alias_name' => 'Guru'
-            ],
-            [
-                'name' => 'kepala_sekolah',
-                'alias_name' => 'Kepala Sekolah'
             ],
             [
                 'name' => 'siswa',

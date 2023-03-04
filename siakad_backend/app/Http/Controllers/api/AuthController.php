@@ -9,6 +9,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,8 @@ class AuthController extends Controller
                 'password' => ['required', 'string', 'min:8']
             ]);
 
+            $role = Role::find($request->role_id);
+
             $user = User::where('email', $request->email)->first();
             if($user){
                 return ResponseFormatter::error([
@@ -31,7 +34,8 @@ class AuthController extends Controller
             $data = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'role_id' => $role->id
             ]);
 
             $token_result = $data->createToken('c2lha2FkMjAyMw==')->plainTextToken;

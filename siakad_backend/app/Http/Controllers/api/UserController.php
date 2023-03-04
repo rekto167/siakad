@@ -5,11 +5,14 @@ namespace App\Http\Controllers\api;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
+use App\Models\Student;
 use App\Models\StudentParent;
 use App\Models\SuperAdmin;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -21,49 +24,7 @@ class UserController extends Controller
                 'email' => ['string', 'email'],
                 'password' => ['required', 'string']
             ]);
-
-            if($request->role == 1 || $request->role == 2 || $request->role == 3){
-                //Super Admin / Admin / Orang Tua
-                $request->validate([
-                    'username' => ['required', 'string', 'max:255']
-                ]);
-
-                $user = User::where('username', $request->username)->firstOrFail();
-                if ($user){
-                    return ResponseFormatter::error([
-                        'message' => $request->username.' Sudah Terdaftar.'
-                    ],'User already exist.', 409);
-                }
-            } elseif ($request->role == 4 || $request->role == 5){
-                //Guru / Kepala Sekolah
-                $request->validate([
-                    'nip' => ['required', 'string', 'max:18', 'min:18']
-                ]);
-
-                $user = User::where('nip', $request->nip)->firstOrFail();
-                if ($user){
-                    return ResponseFormatter::error([
-                        'message' => $request->nip.' Sudah Terdaftar.'
-                    ],'User already exist.', 409);
-                }
-
-            } elseif ($request->role == 6){
-                //Siswa
-                $request->validate([
-                    'nis' => ['required', 'string', 'min:10', 'max:10']
-                ]);
-
-                $user = User::where('nis', $request->nis)->firstOrFail();
-                if ($user){
-                    return ResponseFormatter::error([
-                        'message' => $request->nis.' Sudah Terdaftar.'
-                    ],'User already exist.', 409);
-                }
-            } else{
-                return ResponseFormatter::error([
-                    'message' => 'Cek kembali role anda.'
-                ],'Role not found', 404);
-            }
+            $role = Role::where('name', $request->role)->first();
 
             $user = User::create([
                 'name' => $request->name,
@@ -71,15 +32,21 @@ class UserController extends Controller
                 'username' => $request->username ?: null,
                 'nip' => $request->nip ?: null,
                 'nis' => $request->nis ?: null,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'role_id' => $role->id
             ]);
 
-            if ($request->role == 3){
-                //Orang tua
-                StudentParent::create([
+            if ($request->role == 'guru'){
+                Teacher::create([
                     'user_uuid' => $user->uuid,
                 ]);
             }
+            if ($request->role == 'siswa'){
+                Student::create([
+                    'user_uuid' => $user->uuid,
+                ]);
+            }
+            $user->assignRole($request->role);
 
             $profile = Profile::create([
                 'user_uuid' => $user->uuid,

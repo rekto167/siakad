@@ -57,6 +57,12 @@ const Account = () => {
     }
   }
 
+  const buatAkun = async () => {
+    const res = await axios.post('http://localhost:8000/api/akun/tambah', formData);
+
+  }
+
+
   return (
     <div className={"mt-3 p-3 md:p-5 font-semibold"}>
       <button
@@ -124,10 +130,34 @@ const Account = () => {
                   <div className="flex flex-col mt-2">
                     <label className="font-semibold">Password</label>
                     <input name="password" className="p-2 rounded-md w-full outline-cyan-500" type="password" onChange={handleChange} />
+                    {
+                      formData.confirmPassword !== '' ?
+                          formData.password !== formData.confirmPassword   ? (
+                              <span className="font-semibold text-red-500">Password tidak sama</span>
+                              ) : null
+                          : null
+                    }
+                    {
+                      formData.password.length < 8 ? (
+                          <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
+                      ) : null
+                    }
                   </div>
                   <div className="flex flex-col mt-2">
                     <label className="font-semibold">Konfirmasi Password</label>
                     <input name="confirmPassword" className="p-2 rounded-md w-full outline-cyan-500" type="password" onChange={handleChange} />
+                    {
+                      formData.confirmPassword !== '' ?
+                          formData.password !== formData.confirmPassword   ? (
+                              <span className="font-semibold text-red-500">Password tidak sama</span>
+                          ) : null
+                          : null
+                    }
+                    {
+                      formData.confirmPassword.length < 8 ? (
+                          <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
+                      ) : null
+                    }
                   </div>
                 </div>
             ) : (

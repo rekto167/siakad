@@ -24,6 +24,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/roles', [RoleController::class,'index']);
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('/user', [AuthController::class, 'fetch']);
+    Route::prefix('user')->group(function (){
+        Route::get('/', [AuthController::class, 'fetch']);
+        Route::post('/tambah', [\App\Http\Controllers\api\UserController::class, 'add_user']);
+    });
     Route::post('/logout', [AuthController::class, 'logout']);
 });
