@@ -58,8 +58,7 @@ const Account = () => {
   }
 
   const buatAkun = async () => {
-    const res = await axios.post('http://localhost:8000/api/akun/tambah', formData);
-
+    const res = await axios.post('http://localhost:8000/api/user  /tambah', formData);
   }
 
 
@@ -106,12 +105,12 @@ const Account = () => {
             ) : formData.role === 'guru' ? (
                 <div>
                   <label className="font-semibold">NIP</label>
-                  <input name="nip" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} />
+                  <input name="nip" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} maxLength={18} />
                 </div>
             ) : formData.role === 'siswa' ? (
                 <div>
                   <label className="font-semibold">NIS</label>
-                  <input name="nis" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} />
+                  <input name="nis" className="p-2 rounded-md w-full outline-cyan-500 mt-2" onChange={handleChange} maxLength={10} />
                 </div>
             ) : (<div></div>)
           }
@@ -138,9 +137,11 @@ const Account = () => {
                           : null
                     }
                     {
-                      formData.password.length < 8 ? (
-                          <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
-                      ) : null
+                      formData.password !== '' ?
+                          formData.password.length < 8 ? (
+                              <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
+                          ) : null
+                          : null
                     }
                   </div>
                   <div className="flex flex-col mt-2">
@@ -154,9 +155,11 @@ const Account = () => {
                           : null
                     }
                     {
-                      formData.confirmPassword.length < 8 ? (
-                          <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
-                      ) : null
+                      formData.confirmPassword !== '' ?
+                          formData.confirmPassword.length < 8 ? (
+                              <span className="font-semibold text-red-500">Password minimal 8 karakter</span>
+                          ) : null
+                          :null
                     }
                   </div>
                 </div>

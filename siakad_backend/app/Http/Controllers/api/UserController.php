@@ -26,6 +26,26 @@ class UserController extends Controller
             ]);
             $role = Role::where('name', $request->role)->first();
 
+            if ($request->role == 'admin'){
+                $request->validate([
+                    'username' => ['required', 'string']
+                ]);
+            }else{
+                if ($request->role == 'guru'){
+                    $request->validate([
+                        'nip' => ['required', 'string', 'max:18']
+                    ]);
+                } elseif ($request->role == 'siswa'){
+                    $request->validate([
+                        'nis' => ['required', 'string', 'max:10']
+                    ]);
+                } else {
+                    return response()->json([
+                        'message' => 'Cek kembali role'
+                    ], 401);
+                }
+            }
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email ?: null,

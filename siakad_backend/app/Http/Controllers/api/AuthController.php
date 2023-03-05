@@ -18,22 +18,23 @@ class AuthController extends Controller
         try {
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email'],
+                'username' => ['required', 'string'],
                 'password' => ['required', 'string', 'min:8']
             ]);
 
-            $role = Role::find($request->role_id);
+            $role = Role::where('name', $request->role)->first();
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('username', $request->username)->first();
             if($user){
-                return ResponseFormatter::error([
-                    'message' => 'Akun sudah ada.'
-                ], 'User was already exist.', 409);
+               return response()->json([
+                   'message' => 'Akun sudah terdaftar'
+               ],409);
             }
 
             $data = User::create([
                 'name' => $request->name,
-                'email' => $request->email,
+                'email' => $request->email ?: null,
+                'username' => $request->username,
                 'password' => Hash::make($request->password),
                 'role_id' => $role->id
             ]);
@@ -53,31 +54,51 @@ class AuthController extends Controller
     {
         try {
             $request->validate([
-                'email' => ['required', 'string', 'email'],
+                'role' => ['required', 'string'],
+                'username_info' => ['required', 'string'],
                 'password' => ['required', 'string']
             ]);
 
-            $credential = request(['email', 'password']);
-            if(!Auth::attempt($credential)){
-                return ResponseFormatter::error([
-                    'message' => 'Unauthorized'
-                ],'Auth Failed', 401);
+            if ($request->role == 'admin'){
+                if(!Auth::attempt(['username' => $request->username_info, 'password' => $request->password])){
+                    return response()->json([
+                        'message' => 'Auth gagal'
+                    ],401);
+                }
+                $user = User::where('username', $request->username_info)->first();
+            } elseif($request->role == 'guru'){
+                if(!Auth::attempt(['nip' => $request->username_info, 'password' => $request->password])){
+                    return response()->json([
+                        'message' => 'Auth gagal'
+                    ],401);
+                }
+                $user = User::where('nip', $request->username_info)->first();
+            } elseif ($request->role == 'siswa'){
+                if(!Auth::attempt(['nis' => $request->username_info, 'password' => $request->password])){
+                    return response()->json([
+                        'message' => 'Auth gagal'
+                    ],401);
+                }
+                $user = User::where('nis', $request->username_info)->first();
+            } else{
+                return response()->json([
+                    'message' => 'Pastikan role login anda benar'
+                ],404);
             }
 
-            $user = User::where('email', $request->email)->first();
             if(!Hash::check($request->password, $user->password, [])){
                 throw new \Exception('Invalid Credential');
             }
 
             $token = $user->createToken('c2lha2FkMjAyMw==')->plainTextToken;
-            return ResponseFormatter::success([
+            return response()->json([
                 'token' => $token,
                 'user' => $user
-            ],'Auth Berhasil');
+            ]);
         }catch (\Exception $error){
-            return ResponseFormatter::error([
-                'message' => $error->getMessage()
-            ], 'Something went wrong.', 500);
+           return response()->json([
+               'error' => $error->getMessage()
+           ],500);
         }
     }
 
@@ -87,6 +108,6 @@ class AuthController extends Controller
     }
 
     public function fetch(Request $request){
-        return ResponseFormatter::success($request->user(), 'Data berhasil di fetch.');
+        return response()->json($request->user());
     }
 }
