@@ -1,3 +1,15 @@
+# SIAKAD
+## System Information Academic
+
+SIAKAD is system information academic in school for manage Score Student, etc.
+
+## Tech Stack Used
+- Laravel (Backend)
+- ReactJS
+- TailwindCSS
+
+## Installation
+Clone Repository
 ```
 git clone https://github.com/rekto167/siakad.git
 ```
