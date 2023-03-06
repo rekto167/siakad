@@ -81,4 +81,17 @@ class UserController extends Controller
             ],500);
         }
     }
+
+    public function list_user(){
+        try {
+            $users = User::where('role_id', '!=', 1)->get();
+
+            return response()->json($users);
+        }catch (\Exception $error){
+            return response()->json([
+                'error' => $error,
+                'message' => 'Something went wrong'
+            ],500);
+        }
+    }
 }

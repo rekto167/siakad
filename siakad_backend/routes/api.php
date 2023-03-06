@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\RoleController;
+use \App\Http\Controllers\api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,8 @@ Route::get('/roles', [RoleController::class,'index']);
 Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('user')->group(function (){
         Route::get('/', [AuthController::class, 'fetch']);
-        Route::post('/tambah', [\App\Http\Controllers\api\UserController::class, 'add_user']);
+        Route::post('/tambah', [UserController::class, 'add_user']);
+        Route::get('/list', [UserController::class, 'list_user']);
     });
     Route::post('/logout', [AuthController::class, 'logout']);
 });
