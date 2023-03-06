@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
 use App\Models\Student;
-use App\Models\StudentParent;
-use App\Models\SuperAdmin;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +16,7 @@ class UserController extends Controller
     public function add_user(Request $request){
         try {
             $request->validate([
-                'role' => 'required',
+                'role' => ['required'],
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['string', 'email'],
                 'password' => ['required', 'string']
@@ -30,20 +27,18 @@ class UserController extends Controller
                 $request->validate([
                     'username' => ['required', 'string']
                 ]);
-            }else{
-                if ($request->role == 'guru'){
-                    $request->validate([
-                        'nip' => ['required', 'string', 'max:18']
-                    ]);
-                } elseif ($request->role == 'siswa'){
-                    $request->validate([
-                        'nis' => ['required', 'string', 'max:10']
-                    ]);
-                } else {
-                    return response()->json([
-                        'message' => 'Cek kembali role'
-                    ], 401);
-                }
+            }elseif($request->role == 'guru'){
+                $request->validate([
+                    'nip' => ['required', 'string', 'max:18']
+                ]);
+            } elseif ($request->role == 'siswa'){
+                $request->validate([
+                    'nis' => ['required', 'string', 'max:10']
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'Cek kembali role'
+                ], 401);
             }
 
             $user = User::create([
@@ -75,14 +70,15 @@ class UserController extends Controller
                 'poto_profil' => $request->poto_profil ?: null,
             ]);
 
-            return ResponseFormatter::success([
+            return response()->json([
+                'message' => 'Berhasil tambah user',
                 'user' => $user,
                 'profile' => $profile
-            ],'Create user successfully.');
+            ]);
         }catch (\Exception $error){
-            return ResponseFormatter::error([
+            return response()->json([
                 'error' => $error->getMessage()
-            ],'Something went wrong', 500);
+            ],500);
         }
     }
 }

@@ -4,6 +4,7 @@ import Login from './components/auth/Login'
 import Navbar from './components/layouts/Navbar'
 import Home from './components/Home'
 import Account from "./components/auth/Account";
+import Alert from "./components/layouts/Alert";
 import {Fragment, useEffect, useId, useState} from "react";
 import backgroundnya from "./assets/img/bg-img.png";
 import {Provider} from "react-redux";
@@ -28,6 +29,7 @@ const App = () => {
                 <Fragment>
                     <div className={'h-screen'} style={{backgroundImage: `url(${backgroundnya})`, backgroundSize:'cover'}}>
                         <Navbar />
+                        <Alert />
                         <Routes>
                             <Route exact path="/" element={<Home />} />
                             <Route exact path="login" element={<Login />} />

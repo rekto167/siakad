@@ -2,9 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
+import {setAlert} from "../../../actions/alert";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {add_account} from "../../../actions/account";
 
 Modal.setAppElement("#root");
-const Account = () => {
+const Account = ({setAlert, add_account}) => {
   const initialFormData = {
     role: '',
     name: '',
@@ -31,34 +35,21 @@ const Account = () => {
 
   const handleChange = e => {
     setFormData({...formData, [e.target.name]: e.target.value});
-    console.log(formData)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     if (formData.password !== formData.confirmPassword){
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      })
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Password Salah!'
-      })
+      setAlert('Password tidak cocok', 'error');
     }
+    // createAccount();
+    add_account(formData)
+    handleModal()
   }
 
-  const buatAkun = async () => {
-    const res = await axios.post('http://localhost:8000/api/user  /tambah', formData);
+  const createAccount = async() =>{
+    const res = await axios.post('http://localhost:8000/api/user/tambah', formData);
+    console.log(res.data);
   }
 
 
@@ -84,7 +75,7 @@ const Account = () => {
                 <div>
                   <span className="text-center font-semibold">Pilih Role</span>
                   <select className="p-2 w-full rounded-md" name="role" onChange={handleChange}>
-                    <option selected>--Pilih Role---</option>
+                    <option value="">--Pilih Role---</option>
                     <option value="admin">Admin</option>
                     <option value="siswa">Siswa</option>
                     <option value="guru">Guru</option>
@@ -171,6 +162,11 @@ const Account = () => {
           }
 
           <div className="flex justify-around mt-10">
+            {
+              formData.role !== '' ? (
+                  <button className="bg-green-500 p-3 px-10 rounded-md font-semibold text-white" onClick={resetFormData}>Bersihkan</button>
+              ) : null
+            }
             <button className="bg-blue-500 p-3 px-10 font-semibold text-white rounded-md" onClick={handleSubmit}>Simpan</button>
             <button className="bg-red-500 p-3 px-10 font-semibold text-white rounded-md" onClick={handleModal}>Batal</button>
           </div>
@@ -180,4 +176,9 @@ const Account = () => {
   );
 };
 
-export default Account;
+Account.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  add_account: PropTypes.func.isRequired
+}
+
+export default connect(null, {setAlert, add_account})(Account);

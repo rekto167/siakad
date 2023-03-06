@@ -1,7 +1,8 @@
 import Tutwuri from '../../../assets/img/tutwuri.png';
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
 
-const Navbar = () => {
+const Navbar = ({isAuthenticated}) => {
     return (
         <nav className="bg-cyan-400 border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-900">
             <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -11,9 +12,17 @@ const Navbar = () => {
                         className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">SIAKAD</span>
                 </Link>
                 <div className="flex md:order-2 ">
-                    <Link to="/login"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none rounded-md focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
-                    </Link>
+                    {
+                        isAuthenticated == false ? (
+                            <Link to="/login"
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none rounded-md focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
+                            </Link>
+                        ) : (
+                            <Link to="/login"
+                                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none rounded-md focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Logout
+                            </Link>
+                        )
+                    }
                     <button data-collapse-toggle="navbar-cta" type="button"
                             className="inline-flex items-center p-2 text-sm text-gray-500 md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                             aria-controls="navbar-cta" aria-expanded="false">
@@ -53,4 +62,8 @@ const Navbar = () => {
     )
 }
 
-export default Navbar;
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, null)(Navbar);
